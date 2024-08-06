@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Recipe Management | Home{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <center>
+            <!-- Search Form -->
+            <form class="d-flex mb-3" method="get" action="{% url 'allrecipe' %}">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search by ID or Name" aria-label="Search" value="{{ request.GET.search }}">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            
+            <!-- Data Not Found Message -->
+            <div id="no-results" class="alert alert-warning d-none" role="alert">
+                Data Not Found
+            </div>
+            
+            <!-- Recipe Table -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Recipe ID</th>
+                        <th>Name</th>
+                        <th>Ingredients</th>
+                        <th>Instructions</th>
+                        <th>Preparation Time</th>
+                        <th>Cooking Time</th>
+                        <th>Total Time</th>
+                        <th>Image</th>
+                        <th>Category</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="recipe-table-body">
+                    {% if allrecipe %}
+                        {% for x in allrecipe %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ x.recipeid }}</td>
+                            <td>{{ x.name }}</td>
+                            <td>{{ x.ingredients }}</td>
+                            <td>{{ x.instructions }}</td>
+                            <td>{{ x.prep_time }}</td>
+                            <td>{{ x.cook_time }}</td>
+                            <td>{{ x.total_time }}</td>
+                            <td>
+                                <img src="{{ x.image.url }}" alt="{{ x.name }}" width="100px" height="100px">
+                            </td>
+                            <td>{{ x.get_category_display }}</td>
+                            <td><a href="{% url 'updaterecipe' x.recipeid %}">Update</a></td>
+                            <td><a href="{% url 'deleterecipe' x.recipeid %}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="12" class="text-center">No recipes found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </center>
+    </div>
+</div>
+
+<!-- JavaScript to handle "Data Not Found" message -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var noResultsDiv = document.getElementById('no-results');
+    var tableBody = document.getElementById('recipe-table-body');
+
+    if (tableBody.querySelector('tr') && tableBody.querySelector('tr').textContent.includes('No recipes found')) {
+        noResultsDiv.classList.remove('d-none');
+    } else {
+        noResultsDiv.classList.add('d-none');
+    }
+});
+</script>
+{% endblock %}

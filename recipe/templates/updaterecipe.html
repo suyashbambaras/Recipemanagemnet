@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}PetStore|Update{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+<center>
+    <h1>Update Pet</h1>
+    <form method="post" enctype="multipart/form-data" action="">
+        {% csrf_token %}
+    <table class="table table-bordered">
+        <tr>
+            {{form.as_table}}
+        </tr>  
+    </table>
+    <br>
+    <input type="submit" value="Update">
+    <button><a href="{% url 'allrecipe' %}">Cancel</a></button>
+    </form>
+</center>
+    </div>
+</div>
+{% endblock %}
